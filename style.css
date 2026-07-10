@@ -1,0 +1,145 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box ;
+}
+body {
+  background-color: #15232d;
+  min-height: 100vh;
+  
+}
+#container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#lang{
+  margin-top: 20px;
+  font-size: 25px;
+  color: white;
+}
+
+#lang1{
+  margin-top: 20px;
+  font-size: 40px;
+  color: white;
+}
+
+#output{
+  color:white;
+}
+
+input{
+  width:90%;
+  max-width: 350px;
+  height: 55px;
+  border-radius: 15px;
+  border: 1px solid #4d5964;
+  margin-top: 20px;
+  font-size: 16px;
+  color: white;
+  padding-left: 15px;
+  background:transparent;
+}
+
+.btn{
+  margin-top: 25px;
+  width:25%;
+  max-width: 350px;
+  height: 50px;
+  border-radius: 10px;
+ font-size: 25px;
+}
+
+#result{
+  margin-top: 25px;
+  color: white;
+}
+
+
+#step2{
+  margin-top: 20px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  }
+#mk{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+}
+.btn1{
+   margin-top: 25px;
+   width: 25%;
+   height: 50px;
+   border-radius: 10px;
+   font-size: 25px;
+}
+
+#output{
+  margin-top: 20px;
+  font-size: 20px;
+  color: white;
+}
+
+#step3{
+  margin-top: 20px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding:20px;
+  }
+  
+#relationship{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+}
+
+#numbers{
+  padding-left: 20px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn2{
+   margin-top: 25px;
+   width: 17%;
+   height: 50px;
+   border-radius: 10px;
+   font-size: 25px;
+}
+#finalresult{
+  margin-top: 25px;
+  color: white;
+}
+
+#numbers{
+  margin-top: 20px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  }
+  
+#btnbox{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+}
