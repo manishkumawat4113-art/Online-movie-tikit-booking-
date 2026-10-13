@@ -1,93 +1,235 @@
-let input = document.querySelector("#name");
-let btn = document.querySelector("#next");
-let result = document.querySelector("#result");
+const box = document.querySelector("#box");
+const img = document.querySelector("#mainImg");
+const marker = document.querySelector("#marker");
+const output = document.querySelector("#output");
+const imageInput = document.querySelector("#imageInput");
+const copyBtn = document.querySelector("#copyBtn");
+const resetBtn = document.querySelector("#resetBtn");
+const imageUrl = document.querySelector("#imageUrl");
+const loadUrlBtn = document.querySelector("#loadUrlBtn");
 
-btn.addEventListener("click", function () {
-    let username = input.value;   // Input se name lena
+// Load image using URL
+loadUrlBtn.addEventListener("click", function () {
+  const url = imageUrl.value.trim();
 
-    result.innerText = "Welcome"+" "+username;  // 
-    
-step2.style.display = "block";
+  if (!url) {
+    alert("Bro, pehle image URL paste karo!");
+    return;
+  }
 
+  resetArea();
+
+  img.onload = function () {
+    resetArea();
+  };
+
+  img.onerror = function () {
+    alert("Image load nahi hui. Direct image URL try karo.");
+  };
+
+  img.src = url;
+});
+let area = null;
+let action = "";
+let startX = 0;
+let startY = 0;
+let original = null;
+
+// Image load
+imageInput.addEventListener("change", function () {
+  const file = this.files[0];
+
+  if (!file) return;
+
+  img.src = URL.createObjectURL(file);
+
+  img.onload = function () {
+    resetArea();
+  };
 });
 
-let yesBtn = document.querySelector("#yes");
-let noBtn = document.querySelector("#no");
-let output = document.querySelector("#output");
+// Start drawing only when no rectangle exists
+img.addEventListener("pointerdown", function (e) {
+  if (!img.src || area) return;
 
-yesBtn.addEventListener("click", function () {
+  e.preventDefault();
 
-    output.innerText = "";
+  const rect = img.getBoundingClientRect();
 
-    let count = 10;
+  startX = e.clientX - rect.left;
+  startY = e.clientY - rect.top;
 
-    let timer = setInterval(function () {
+  area = {
+    x: startX,
+    y: startY,
+    w: 1,
+    h: 1
+  };
 
-        output.innerText += `Countdown ${count} 😊\n`;
+  action = "draw";
+  marker.style.display = "block";
+  updateMarker();
 
-        count--;
-
-        if (count < 0) {
-            clearInterval(timer);
-
-            output.innerText += `
-Good Bye 2025 👋
-Welcome 2K26 😊🎉
-Happy New Year 2K26 ✨🌟
-`;
-
- step3.style.display = "block";
-
-}},100);
-  
+  img.setPointerCapture(e.pointerId);
 });
 
-noBtn.addEventListener("click", function () {
-    output.innerText = "You are not ready. You can leave it 😔";
+// Move or resize rectangle
+marker.addEventListener("pointerdown", function (e) {
+  if (!area) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const rect = img.getBoundingClientRect();
+
+  startX = e.clientX - rect.left;
+  startY = e.clientY - rect.top;
+
+  const handle = e.target.closest(".handle");
+
+  action = handle ? handle.classList[1] : "move";
+
+  original = { ...area };
+
+  marker.setPointerCapture(e.pointerId);
 });
 
-let data = {
-    family: [
-        "Wishing our family a year full of love, health and happiness ❤️",
-        "May this New Year bring peace, togetherness and endless smiles to our family ✨",
-        "Cheers to another year of love, laughter and family bonding 🎉",
-        "May our family stay blessed, united andd strong throughout the year 🙏",
-        "Happy New Year to a family that makes every moment special 💫"
-    ],
+// Track pointer movement
+function movePointer(e) {
+  if (!action || !area) return;
 
-    friend: [
-        "Wishing you a year full of success, laughter and great memories my friend 🎉",
-        "May this New Year bring new opportunities and endless fun into your life ✨"",
-        "Cheers to another year of friendship, growth and crazy moments 😄,
-        "Happy New Year to a friend who makes life more awesome 💫",
-        "May this year strengthen our bond and bring happiness all around 🤝"
-    ]
-};
+  const rect = img.getBoundingClientRect();
 
-let relationBtns = document.querySelectorAll("#relationship button");
-let numberDiv = document.querySelector("#numbers");
-let numberBtns = document.querySelectorAll("#numbers button");
-let finalresult = document.querySelector("#finalresult");
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
 
-let current = "";
+  const dx = x - startX;
+  const dy = y - startY;
 
-relationBtns.forEach(function(btn){
+  const maxW = img.clientWidth;
+  const maxH = img.clientHeight;
 
-    btn.addEventListener("click", function(){
+  if (action === "draw") {
+    area.x = Math.max(0, Math.min(startX, x));
+    area.y = Math.max(0, Math.min(startY, y));
 
-        current = btn.id;
-        numberDiv.style.display = "block";
+    area.w = Math.abs(x - startX);
+    area.h = Math.abs(y - startY);
+  }
 
-    });
+  else if (action === "move") {
+    area.x = Math.max(
+      0,
+      Math.min(maxW - original.w, original.x + dx)
+    );
 
+    area.y = Math.max(
+      0,
+      Math.min(maxH - original.h, original.y + dy)
+    );
+  }
+
+  else {
+    let left = original.x;
+    let top = original.y;
+    let right = original.x + original.w;
+    let bottom = original.y + original.h;
+
+    if (action.includes("l")) {
+      left = Math.max(0, Math.min(right - 1, original.x + dx));
+    }
+
+    if (action.includes("r")) {
+      right = Math.min(maxW, Math.max(left + 1, original.x + original.w + dx));
+    }
+
+    if (action.includes("t")) {
+      top = Math.max(0, Math.min(bottom - 1, original.y + dy));
+    }
+
+    if (action.includes("b")) {
+      bottom = Math.min(maxH, Math.max(top + 1, original.y + original.h + dy));
+    }
+
+    area.x = left;
+    area.y = top;
+    area.w = right - left;
+    area.h = bottom - top;
+  }
+
+  updateMarker();
+  generateCSS();
+}
+
+img.addEventListener("pointermove", movePointer);
+marker.addEventListener("pointermove", movePointer);
+
+// Stop dragging
+function stopPointer() {
+  action = "";
+  original = null;
+}
+
+img.addEventListener("pointerup", stopPointer);
+marker.addEventListener("pointerup", stopPointer);
+img.addEventListener("pointercancel", stopPointer);
+marker.addEventListener("pointercancel", stopPointer);
+
+// Update rectangle position
+function updateMarker() {
+  marker.style.left = area.x + "px";
+  marker.style.top = area.y + "px";
+  marker.style.width = area.w + "px";
+  marker.style.height = area.h + "px";
+}
+
+// Generate CSS
+function generateCSS() {
+  if (!area || !img.naturalWidth) return;
+
+  const scaleX = img.naturalWidth / img.clientWidth;
+  const scaleY = img.naturalHeight / img.clientHeight;
+
+  const x = Math.round(area.x * scaleX);
+  const y = Math.round(area.y * scaleY);
+  const w = Math.round(area.w * scaleX);
+  const h = Math.round(area.h * scaleY);
+
+  output.textContent =
+`.target-button {
+  position: absolute;
+  left: ${x}px;
+  top: ${y}px;
+  width: ${w}px;
+  height: ${h}px;
+  opacity: 0;
+  cursor: pointer;
+}`;
+}
+
+// Copy CSS
+copyBtn.addEventListener("click", async function () {
+  try {
+    await navigator.clipboard.writeText(output.textContent);
+    copyBtn.textContent = "Copied!";
+
+    setTimeout(() => {
+      copyBtn.textContent = "Copy CSS";
+    }, 1200);
+  } catch {
+    output.focus?.();
+    alert("Copy nahi hua. CSS ko manually select karke copy karo.");
+  }
 });
 
-numberBtns.forEach(function(btn,index){
+// Reset rectangle
+function resetArea() {
+  area = null;
+  action = "";
+  original = null;
 
-    btn.addEventListener("click", function(){
+  marker.style.display = "none";
+  output.textContent = "Image load karke area select karo.";
+}
 
-        finalresult.innerText = data[current][index];
-
-    });
-
-});
+resetBtn.addEventListener("click", resetArea);
