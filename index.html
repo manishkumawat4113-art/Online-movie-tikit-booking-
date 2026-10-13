@@ -1,52 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tic-Tac-Toe Game</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="container">
-  <p1 id="lang">============================</p1>
-  <p1 id="lang1">Happy New Year</p1>
-  <p1 id="lang">============================</p1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MK Image Area Selector</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-<input type="text" id="name" placeholder="Enter Your Name">
-<button class="btn" id="next">Next</button>
-<h2 id="result"></h2>
+  <h2>MK Image Area Selector</h2>
 
-<div id="step2">
-<p1 id="lang">ready for countdown start✨</p1>
-<div id="mk">
-<button class="btn1"id="yes">Yes</button>
-<button class="btn1"id="no">No</button>
-</div>
-<pre id="output"></pre>
-</div>
+ <div class="controls">
+  <label>Select image from phone:</label>
+  <input type="file" id="imageInput" accept="image/*">
 
-<div id="step3">
-<p1 id="lang">Select the type of relationship to receive a New Year message:</p1>
-<div id="relationship">
-    <button class="btn1"id="family">Family</button>
-    <button class="btn1"id="friend">Friend</button>
-</div>
+  <p>Or paste image URL from Chrome:</p>
+
+  <input
+    type="url"
+    id="imageUrl"
+    placeholder="Paste image URL here"
+  >
+
+  <button id="loadUrlBtn">Load Image</button>
 </div>
 
-<div id="numbers">
-  <p1 id="lang">Select any number for your best wishesh</p1>
-<div id="btnbox">
-    <button class="btn2">1</button>
-    <button class="btn2">2</button>
-    <button class="btn2">3</button>
-    <button class="btn2">4</button>
-    <button class="btn2">5</button>
-</div>
-</div>
+  <div id="box">
+    <img id="mainImg" alt="Your image">
+    <div id="marker">
+      <span class="handle tl"></span>
+      <span class="handle tr"></span>
+      <span class="handle bl"></span>
+      <span class="handle br"></span>
+    </div>
+  </div>
 
-<h2 id="finalresult"></h2>
+  <h3>Generated CSS</h3>
+  <pre id="output">Image load karke area select karo.</pre>
 
-</div>
-    <script src="script.js"></script>
-  </body>
+  <button id="copyBtn">Copy CSS</button>
+  <button id="resetBtn">Reset</button>
+
+  <script src="script.js"></script>
+</body>
 </html>
